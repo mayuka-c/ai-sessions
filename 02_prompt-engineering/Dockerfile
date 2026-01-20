@@ -30,5 +30,5 @@ COPY prompts.py .
 ENV PYTHONUNBUFFERED=1
 ENV TRANSFORMERS_CACHE=/root/.cache/huggingface
 
-# Keep container running (do not auto-run the application)
+# Keep container running indefinitely
 CMD ["tail", "-f", "/dev/null"]

@@ -20,12 +20,12 @@ pip install -r requirements.txt
 python transformers_pract.py
 ```
 
-### Option 2: Run with Docker
+### Option 2: Run with Podman
 
 ```bash
 # Build the image
-docker build -t transformers-practice .
+podman build -t transformers-practice .
 
 # Run the container
-docker run -it transformers-practice
+podman run -it transformers-practice
 ```

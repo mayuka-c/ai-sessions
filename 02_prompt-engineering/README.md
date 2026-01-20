@@ -1,4 +1,4 @@
-# Prompt Engineering with FLAN-T5
+# Prompt Engineering
 
 Interactive demonstration of various prompt engineering techniques using google/flan-t5-small model.
 
@@ -22,11 +22,11 @@ pip install -r requirements.txt
 python prompts.py
 ```
 
-## Docker Setup
+## Podman Setup
 
-### Build the Docker image
+### Build the Podman image
 ```bash
-docker build -t prompt-engineering .
+podman build -t prompt-engineering .
 ```
 
 This will:
@@ -36,21 +36,21 @@ This will:
 
 ### Run the container
 ```bash
-docker run -it prompt-engineering
+podman run -it prompt-engineering
 ```
 
 The `-it` flags are required for interactive input.
 
 ### Optional: Run with volume mount (for development)
 ```bash
-docker run -it -v $(pwd):/app prompt-engineering
+podman run -it -v $(pwd):/app prompt-engineering
 ```
 
 ## Model Information
 
 - **Model**: google/flan-t5-small
 - **Size**: ~300MB
-- **Downloaded during**: Docker image build (not at runtime)
+- **Downloaded during**: Podman image build (not at runtime)
 - **Cache location**: /root/.cache/huggingface
 
 ## Requirements
