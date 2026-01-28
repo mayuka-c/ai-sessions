@@ -4,7 +4,7 @@ Contains hands on tutorials for AI learnings.
 ## Pre-Requisite
 - Install Podman
 - Install Python (IfNotPresent) locally ~ From v3.11+ (Only required if running locally)
-- System with sufficient space ~ Around 3 GB (To download and run models)
+- System with sufficient memory and space ~ Around 5 GB (To download and run models)
 
 ## Usage
 
