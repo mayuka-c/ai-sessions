@@ -16,9 +16,9 @@ def initialize_model(model_name: str | None = None):
     The returned generator has a signature: generate(prompt, max_length=..., **kwargs)
     and supports optional decoding params like num_beams.
     """
-    # Allow configuration via environment variable; default to flan-t5-base
+    # Allow configuration via environment variable; default to flan-t5-large
     if model_name is None:
-        model_name = os.environ.get("MODEL_NAME", "google/flan-t5-base")
+        model_name = os.environ.get("MODEL_NAME", "google/flan-t5-large")
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
 
@@ -42,8 +42,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Prompt Engineering Demo with FLAN-T5")
     parser.add_argument(
         "--model",
-        choices=["base", "small", "google/flan-t5-base", "google/flan-t5-small"],
-        help="Choose model: 'base' (default) or 'small'. You may also pass full HF ids.",
+        choices=["small", "large", "google/flan-t5-small", "google/flan-t5-large"],
+        help="Choose model: 'large' (default) or 'small'. You may also pass full HF ids.",
     )
     return parser.parse_args()
 
@@ -87,11 +87,12 @@ def main():
     print("PROMPT ENGINEERING DEMONSTRATION")
     print("="*70)
     args = parse_args()
-    # Resolve chosen model: CLI overrides env var; defaults to base
+    # Resolve chosen model: CLI overrides env var; defaults to large
     if args.model is None:
-        chosen_model = os.environ.get("MODEL_NAME", "google/flan-t5-base")
-    elif args.model in ("base", "google/flan-t5-base"):
-        chosen_model = "google/flan-t5-base"
+        chosen_model = os.environ.get("MODEL_NAME", "google/flan-t5-large")
+    elif args.model in ("large", "google/flan-t5-large", "base"):
+        # Map legacy 'base' to 'large' for compatibility
+        chosen_model = "google/flan-t5-large"
     elif args.model in ("small", "google/flan-t5-small"):
         chosen_model = "google/flan-t5-small"
     print("This program demonstrates various prompting techniques using")
