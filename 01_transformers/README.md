@@ -1,18 +1,21 @@
 # Transformers Practice
 
-Interactive Python application demonstrating text generation, tokenization, and translation using Hugging Face Transformers.
+Interactive Python application demonstrating text generation and tokenization using Hugging Face Transformers.
 
 ## Features
 
 1. Text Generation (DistilGPT2)
 2. Tokenization Demo (Encode & Decode)
-3. Translation (English → French)
 
 ## How to Run
 
 ### Option 1: Run Locally
 
 ```bash
+# Creating a new virtual env
+python3 -m venv .venv
+source .venv/bin/activate
+
 # Install dependencies
 pip install -r requirements.txt
 
@@ -24,8 +27,9 @@ python transformers_pract.py
 
 ```bash
 # Build the image
-podman build -t transformers-practice .
+podman build -t ai-session-transformers .
 
 # Run the container
-podman run -it transformers-practice
+podman run -it --rm --name ai-session-transformer-pract \
+  ai-session-transformers python3 /app/transformers_pract.py
 ```

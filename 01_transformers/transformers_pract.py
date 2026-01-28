@@ -18,10 +18,9 @@ def generate_text(generator, prompt):
     
     results = generator(
         prompt, 
-        max_new_tokens=50,
+        max_new_tokens=500,
         num_return_sequences=1,
         temperature=0.7,           # Controls randomness (0.7-0.9 is good for creative text)
-        top_k=50,                  # Consider only top 50 tokens
         top_p=0.95,                # Nucleus sampling - consider tokens that make up 95% probability
         repetition_penalty=1.2,    # Penalize repeated tokens
         do_sample=True,            # Enable sampling (vs greedy)
@@ -65,25 +64,7 @@ def tokenization_demo(tokenizer, text):
     print("• This process allows models to work with text numerically")
     print(f"{'='*60}\n")
 
-def translation_demo():
-    """Demonstrate translation functionality"""
-    print(f"\n{'='*60}")
-    print("TRANSLATION")
-    print(f"{'='*60}")
     
-    # Load translation pipeline
-    print("Loading translation model (English to French)...")
-    translator = pipeline("translation_en_to_fr", model="t5-small")
-    
-    text = input("Enter text to translate (English → French): ").strip()
-    if not text:
-        text = "Hello, how are you today?"
-        print(f"Using default: {text}")
-    
-    print(f"\nOriginal (English): {text}")
-    result = translator(text, max_length=100)
-    print(f"Translation (French): {result[0]['translation_text']}")
-    print(f"{'='*60}\n")
 
 def display_menu():
     """Display the main menu"""
@@ -92,8 +73,7 @@ def display_menu():
     print("="*60)
     print("1. Generate Text from Custom Prompt")
     print("2. Tokenization Demo (Encode & Decode)")
-    print("3. Translation (English → French)")
-    print("4. Exit")
+    print("3. Exit")
     print("="*60)
 
 def main():
@@ -104,7 +84,7 @@ def main():
     
     while True:
         display_menu()
-        choice = input("Enter your choice (1-4): ").strip()
+        choice = input("Enter your choice (1-3): ").strip()
         
         if choice == '1':
             prompt = input("\nEnter your prompt: ").strip()
@@ -121,15 +101,12 @@ def main():
             tokenization_demo(tokenizer, text)
             
         elif choice == '3':
-            translation_demo()
-            
-        elif choice == '4':
             print("\nThank you for using Transformers Practice!")
             print("Goodbye! 👋\n")
             break
             
         else:
-            print("\nInvalid choice! Please enter a number between 1 and 4.\n")
+            print("\nInvalid choice! Please enter a number between 1 and 3.\n")
 
 if __name__ == "__main__":
     main()
