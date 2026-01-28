@@ -1,4 +1,4 @@
-from transformers import pipeline, AutoTokenizer
+from transformers import pipeline, AutoTokenizer, GenerationConfig
 
 def create_simple_llm():
     """Create a simple language model pipeline"""
@@ -15,19 +15,23 @@ def generate_text(generator, prompt):
     print("GENERATING TEXT")
     print(f"{'='*60}")
     print(f"Input Prompt: {prompt}\n")
-    
-    results = generator(
-        prompt, 
+    # Use a GenerationConfig exclusively to avoid deprecation warnings
+    # about mixing generation_config with explicit generation parameters.
+    gen_config = GenerationConfig(
         max_new_tokens=500,
         num_return_sequences=1,
-        temperature=0.7,           # Controls randomness (0.7-0.9 is good for creative text)
-        top_p=0.95,                # Nucleus sampling - consider tokens that make up 95% probability
-        repetition_penalty=1.2,    # Penalize repeated tokens
-        do_sample=True,            # Enable sampling (vs greedy)
-        no_repeat_ngram_size=2     # Prevent repeating 2-grams
+        temperature=0.7,        # Controls randomness (0.7-0.9 is good for creative text)
+        top_p=0.95,             # Nucleus sampling - consider tokens that make up 95% probability
+        repetition_penalty=1.2, # Penalize repeated tokens
+        do_sample=True,         # Enable sampling (vs greedy)
+        no_repeat_ngram_size=2,
+        # Explicitly unset max_length to avoid the "both set" warning
+        max_length=None,
     )
+
+    results = generator(prompt, generation_config=gen_config)
     
-    print(f"Generated Text:\n{results[0]['generated_text']}")
+    print(f"\nGenerated Text:\n\n{results[0]['generated_text']}")
     print(f"{'='*60}\n")
 
 def tokenization_demo(tokenizer, text):
@@ -87,7 +91,7 @@ def main():
         choice = input("Enter your choice (1-3): ").strip()
         
         if choice == '1':
-            prompt = input("\nEnter your prompt: ").strip()
+            prompt = input("\nEnter your prompt (Press Enter to use default): ").strip()
             if not prompt:
                 prompt = "Once upon a time in a land far, far away"
                 print(f"No prompt entered. Using default: {prompt}")
