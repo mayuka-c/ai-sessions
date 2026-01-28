@@ -1,10 +1,9 @@
 # Prompt Engineering
 
-Interactive demonstration of various prompt engineering techniques using google/flan-t5-small model.
+Interactive demonstration of various prompt engineering techniques using Google FLAN-T5 models.
 
 ## Features
 
-- Simple Prompt
 - Zero-Shot Prompt
 - Few-Shot Prompt
 - Chain-of-Thought Prompt
@@ -15,42 +14,67 @@ Interactive demonstration of various prompt engineering techniques using google/
 ## Local Setup
 
 ```bash
+# Creating a new virtual env
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+```bash
 # Install dependencies
 pip install -r requirements.txt
 
-# Run the application
+# Run (defaults to base)
 python prompts.py
+
+# Prefer CLI to choose model
+python prompts.py --model base
+python prompts.py --model small
+
+# Optional: choose via env var instead
+MODEL_NAME=google/flan-t5-base python prompts.py
+MODEL_NAME=google/flan-t5-small python prompts.py
 ```
 
-## Podman Setup
+## Container Setup (Podman)
 
-### Build the Podman image
+### Build the image
 ```bash
-podman build -t prompt-engineering .
+# With Podman
+podman build -t ai-session-prompt-engineering .
+
+# With Docker
+docker build -t ai-session-prompt-engineering .
 ```
 
 This will:
 - Install all dependencies
-- Pre-download the google/flan-t5-small model (~300MB)
+- Pre-download both models into cache:
+	- google/flan-t5-base (~800MB)
+	- google/flan-t5-small (~300MB)
 - Set up the application environment
 
 ### Run the container
 ```bash
-podman run -it prompt-engineering
-```
+# Podman (explicit model via CLI)
+podman run -it --rm --name ai-session-prompts \
+  ai-session-prompt-engineering python3 /app/prompts.py --model base
 
-The `-it` flags are required for interactive input.
+# Docker (use the smaller model via CLI)
+docker run -it --rm --name ai-session-prompts \
+  ai-session-prompt-engineering python3 /app/prompts.py --model small
 
-### Optional: Run with volume mount (for development)
-```bash
-podman run -it -v $(pwd):/app prompt-engineering
+# Optional: use env var if preferred
+podman run -it --rm --name ai-session-prompts \
+  -e MODEL_NAME=google/flan-t5-small \
+  ai-session-prompt-engineering python3 /app/prompts.py
 ```
 
 ## Model Information
 
-- **Model**: google/flan-t5-small
-- **Size**: ~300MB
-- **Downloaded during**: Podman image build (not at runtime)
+- **Default model**: google/flan-t5-base (~800MB)
+- **Alternative**: google/flan-t5-small (~300MB)
+- **Selection**: use `--model base|small` (preferred) or `MODEL_NAME` env var
+- **Downloaded during**: container image build
 - **Cache location**: /root/.cache/huggingface
 
 ## Requirements

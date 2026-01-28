@@ -1,4 +1,4 @@
-def zero_shot_prompt(generator):
+def zero_shot_prompt(generator, user_prompt: str | None = None):
     '''
     ZERO-SHOT PROMPT (No Examples Given)
     
@@ -7,20 +7,19 @@ def zero_shot_prompt(generator):
     Useful for tasks the model has been trained on but you want to test without guidance.
     
     Additional Example Prompts:
-    - "Translate to Spanish: Hello, how are you?"
-    - "What is the capital of Germany?"
     - "Is this statement positive or negative: I hate waiting in long lines."
+    - "How do airplanes fly?"
+    - "Translate to German: Hello, how are you?"
     '''
     print(f"\n{'='*70}")
-    print("2. ZERO-SHOT PROMPT (No Examples Given)")
+    print("1. ZERO-SHOT PROMPT (No Examples Given)")
     print(f"{'='*70}")
     
-    user_prompt = input("\nEnter your prompt (or press Enter for default): ").strip()
     if not user_prompt:
-        user_prompt = "Classify the sentiment: This movie was absolutely fantastic! I loved every minute."
+        user_prompt = "Translate to Spanish: Hello, how are you?."
         print(f"Using default: {user_prompt}")
     
     print(f"\nPrompt: {user_prompt}")
-    result = generator(user_prompt, max_length=50, do_sample=False)
-    print(f"Response: {result[0]['generated_text']}")
+    result = generator(user_prompt, max_length=100)
+    print(f"Response: {result}")
     print(f"{'='*70}\n")

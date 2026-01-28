@@ -1,5 +1,5 @@
-# Use Python 3.11 slim image as base
-FROM python:3.11-slim
+# Use Python 3.13 slim image as base
+FROM python:3.13-slim
 
 # Set working directory
 WORKDIR /app
@@ -15,20 +15,29 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Pre-download the model during build time to avoid downloading at runtime
-RUN python -c "from transformers import AutoTokenizer, AutoModelForSeq2SeqLM; \
-    model_name = 'google/flan-t5-small'; \
-    print('Downloading model and tokenizer...'); \
-    tokenizer = AutoTokenizer.from_pretrained(model_name); \
-    model = AutoModelForSeq2SeqLM.from_pretrained(model_name); \
-    print('Model downloaded successfully!')"
+# Pre-download models during build to avoid runtime downloads
+RUN python - << 'PY'
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+
+models = [
+    'google/flan-t5-small',
+    'google/flan-t5-base',
+]
+print('Downloading models into HF cache...')
+for name in models:
+    AutoTokenizer.from_pretrained(name)
+    AutoModelForSeq2SeqLM.from_pretrained(name)
+print('All requested models downloaded successfully!')
+PY
 
 # Copy application code
 COPY prompts.py .
+COPY prompt_types/ prompt_types/
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV TRANSFORMERS_CACHE=/root/.cache/huggingface
+ENV MODEL_NAME=google/flan-t5-base
 
 # Keep container running indefinitely
 CMD ["tail", "-f", "/dev/null"]

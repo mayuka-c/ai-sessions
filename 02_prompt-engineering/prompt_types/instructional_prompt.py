@@ -1,4 +1,4 @@
-def instructional_prompt(generator):
+def instructional_prompt(generator, user_text: str | None = None):
     '''
     INSTRUCTIONAL PROMPT (Clear Directives)
     
@@ -13,18 +13,26 @@ def instructional_prompt(generator):
     - Format Specific: "Instructions: List the main points as numbered items."
     '''
     print(f"\n{'='*70}")
-    print("5. INSTRUCTIONAL PROMPT (Clear Directives)")
+    print("4. INSTRUCTIONAL PROMPT (Clear Directives)")
     print(f"{'='*70}")
     
-    prompt = """Instructions: Summarize the following text in exactly 3 bullet points.
+    if not user_text:
+      user_text = (
+        "Artificial intelligence is transforming industries worldwide. "
+        "Machine learning algorithms can analyze vast amounts of data to identify patterns and make predictions. "
+        "Deep learning, a subset of machine learning, uses neural networks with multiple layers to process complex information. "
+        "Natural language processing enables computers to understand and generate human language. "
+        "Computer vision allows machines to interpret and analyze visual information from the world."
+      )
+      print("Using default source text.")
+    prompt = f"""Instructions: Summarize the following text.
 
-Text: Artificial intelligence is transforming industries worldwide. Machine learning algorithms can analyze vast amounts of data to identify patterns and make predictions. Deep learning, a subset of machine learning, uses neural networks with multiple layers to process complex information. Natural language processing enables computers to understand and generate human language. Computer vision allows machines to interpret and analyze visual information from the world.
-
-Summary:"""
+Write exactly three sentences.
+  Text: {user_text}"""
     
     print("\nInstructional Prompt:")
     print(prompt)
     print("\n--- Model Response ---")
-    result = generator(prompt, max_length=150, do_sample=False)
-    print(f"Response: {result[0]['generated_text']}")
+    result = generator(prompt, max_length=150)
+    print(f"Response: {result}")
     print(f"{'='*70}\n")

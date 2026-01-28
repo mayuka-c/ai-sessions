@@ -1,4 +1,4 @@
-def few_shot_prompt(generator):
+def few_shot_prompt(generator, user_text: str | None = None):
     '''
     FEW-SHOT PROMPT (Learning from Examples)
     
@@ -12,7 +12,7 @@ def few_shot_prompt(generator):
     - Q&A Style: Provide question-answer examples for consistent response format
     '''
     print(f"\n{'='*70}")
-    print("3. FEW-SHOT PROMPT (Learning from Examples)")
+    print("2. FEW-SHOT PROMPT (Learning from Examples)")
     print(f"{'='*70}")
     
     prompt = """Classify the sentiment as positive, negative, or neutral.
@@ -26,12 +26,16 @@ Sentiment: negative
 Example 3: The restaurant was okay, nothing special.
 Sentiment: neutral
 
-Now classify: I absolutely loved the experience and will definitely return!
+Now classify: {final_text}
 Sentiment:"""
     
+    final_text = user_text if user_text else "I absolutely loved the experience and will definitely return!"
+    if user_text is None:
+        print(f"Using default text to classify: {final_text}")
+    prompt = prompt.format(final_text=final_text)
     print("\nFew-Shot Prompt:")
     print(prompt)
     print("\n--- Model Response ---")
-    result = generator(prompt, max_length=50, do_sample=False)
-    print(f"Response: {result[0]['generated_text']}")
+    result = generator(prompt, max_length=50)
+    print(f"Response: {result}")
     print(f"{'='*70}\n")

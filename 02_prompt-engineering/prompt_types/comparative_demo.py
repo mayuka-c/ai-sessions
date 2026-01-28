@@ -1,4 +1,4 @@
-def comparative_demo(generator):
+def comparative_demo(generator, user_prompt: str | None = None):
     '''
     COMPARATIVE DEMO (Same Question, Different Techniques)
     
@@ -13,17 +13,16 @@ def comparative_demo(generator):
     - Role-Based: "You are a physics teacher. How do airplanes fly?"
     '''
     print(f"\n{'='*70}")
-    print("7. COMPARATIVE DEMO (Same Question, Different Techniques)")
+    print("6. COMPARATIVE DEMO (Same Question, Different Techniques)")
     print(f"{'='*70}")
     
-    prompt = input("\nEnter a prompt to test (or press Enter for default): ").strip()
-    if not prompt:
-        prompt = "How do airplanes fly?"
+    prompt = user_prompt if user_prompt else "How do airplanes fly?"
+    if user_prompt is None:
         print(f"Using default: {prompt}")
     
     print(f"\nPrompt: {prompt}")
-    result = generator(prompt, max_length=100, do_sample=False)
-    print(f"Response: {result[0]['generated_text']}")
+    result = generator(prompt, max_length=100)
+    print(f"Response: {result}")
     print(f"\n{'='*70}")
     print("TIP: Try the same question with different techniques (options 1-6)")
     print("to see how prompting style affects the response!")
