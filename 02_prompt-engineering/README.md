@@ -57,7 +57,7 @@ podman run -it --rm --name ai-session-prompts \
   ai-session-prompt-engineering python3 /app/prompts.py --model large
 
 # Docker (use the smaller model via CLI)
-docker run -it --rm --name ai-session-prompts \
+podman run -it --rm --name ai-session-prompts \
   ai-session-prompt-engineering python3 /app/prompts.py --model small
 
 # Optional: use env var if preferred
