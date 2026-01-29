@@ -29,9 +29,6 @@ def initialize_model(model_name: str | None = None):
             # Deterministic decoding by default; can be overridden via kwargs
             "do_sample": kwargs.pop("do_sample", False),
         }
-        # Pass through selected optional generation args if provided
-        if "num_beams" in kwargs and kwargs["num_beams"] is not None:
-            gen_kwargs["num_beams"] = kwargs["num_beams"]
 
         outputs = model.generate(**inputs, **gen_kwargs)
         return tokenizer.decode(outputs[0], skip_special_tokens=True)
