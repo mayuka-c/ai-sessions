@@ -2,9 +2,16 @@ from transformers import pipeline, AutoTokenizer, GenerationConfig
 
 def create_simple_llm():
     """Create a simple language model pipeline"""
+    # Choose a small, fast GPT-2 variant suitable for demos/tests
     model_name = "distilgpt2"
+
+    # Load the matching tokenizer (handles text ⇄ token IDs)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+    # Provide a pad token (GPT-2 family lacks one); using EOS avoids warnings/errors
     tokenizer.pad_token = tokenizer.eos_token
+
+    # Build a high-level text-generation pipeline with the model + tokenizer
     llm_pipeline = pipeline("text-generation", model=model_name, tokenizer=tokenizer)
     
     return llm_pipeline, tokenizer
@@ -19,12 +26,10 @@ def generate_text(generator, prompt):
     # about mixing generation_config with explicit generation parameters.
     gen_config = GenerationConfig(
         max_new_tokens=500,
-        num_return_sequences=1,
         temperature=0.7,        # Controls randomness (0.7-0.9 is good for creative text)
         top_p=0.95,             # Nucleus sampling - consider tokens that make up 95% probability
         repetition_penalty=1.2, # Penalize repeated tokens
-        do_sample=True,         # Enable sampling (vs greedy)
-        no_repeat_ngram_size=2,
+        do_sample=True,         # Enable sampling
         # Explicitly unset max_length to avoid the "both set" warning
         max_length=None,
     )
@@ -49,7 +54,7 @@ def tokenization_demo(tokenizer, text):
     
     # Show each token with its ID
     print("\n--- Token Breakdown ---")
-    tokens = tokenizer.tokenize(text)
+    tokens = tokenizer.tokenize(text) # helpful to see how text gets segmented
     print(f"Tokens: {tokens}")
     for i, (token, token_id) in enumerate(zip(tokens, token_ids)):
         print(f"  {i+1}. Token: '{token}' → ID: {token_id}")
@@ -98,7 +103,7 @@ def main():
             generate_text(generator, prompt)
             
         elif choice == '2':
-            text = input("\nEnter text to tokenize: ").strip()
+            text = input("\nEnter text to tokenize (Press Enter to use default): ").strip()
             if not text:
                 text = "Hello, how are you today?"
                 print(f"No text entered. Using default: {text}")
