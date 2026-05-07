@@ -1,9 +1,19 @@
-# Prompt Engineering with LangChain
+# LangChain with Prompt Engineering
 
-Interactive demonstration of various prompt engineering techniques using LangChain with Granite 3.3:8b model via Ollama.
+Interactive demonstration of LangChain fundamentals and various prompt engineering techniques using Granite 3.3:8b model via Ollama.
 
 ## Features
 
+### LangChain Fundamentals (`langchain_basics/langchain_fundamentals.py`)
+- Basic LLM Setup
+- Prompt Templates
+- LLM Chains (LCEL)
+- Chat Templates
+- Output Parsers
+- Batch Processing
+- Streaming
+
+### Prompt Engineering (`prompts.py`)
 - Zero-Shot Prompt
 - Few-Shot Prompt
 - Chain-of-Thought Prompt
@@ -15,35 +25,55 @@ Interactive demonstration of various prompt engineering techniques using LangCha
 
 - Python 3.11+
 - Ollama installed and running
-- Granite 3.3:8b model pulled in Ollama
+- Granite 3.3:8b model already deployed in Ollama
 
-## Local Setup
+## Setup
 
-### Install Ollama
+### 1. Install Ollama
 
 If you haven't installed Ollama yet, visit [https://ollama.ai](https://ollama.ai) and follow the installation instructions for your platform.
 
-### Pull the Granite Model
+### 2. Verify Granite Model
+
+Ensure the Granite 3.3:8b model is already pulled and available:
+
+```bash
+ollama list
+```
+
+If not available, pull it:
 
 ```bash
 ollama pull granite3.3:8b
 ```
 
-### Setup Python Environment
+### 3. Create Virtual Environment
 
 ```bash
 # Create a new virtual environment
 python3 -m venv .venv
+
+# Activate the virtual environment
+# On macOS/Linux:
 source .venv/bin/activate
 
-# Install dependencies
+# On Windows:
+# .venv\Scripts\activate
+```
+
+### 4. Install Dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
-### Run the Application
+### 5. Run the Applications
 
 ```bash
-# Run with default model (granite3.3:8b)
+# Run LangChain fundamentals (interactive teaching module)
+python langchain_basics/langchain_fundamentals.py
+
+# Run prompt engineering demo with default model (granite3.3:8b)
 python prompts.py
 
 # Or specify a different Ollama model
@@ -53,40 +83,12 @@ python prompts.py --model granite3.3:8b
 MODEL_NAME=granite3.3:8b python prompts.py
 ```
 
-## Container Setup (Podman/Docker)
+### 6. Deactivate Virtual Environment
 
-### Build the image
-
-```bash
-# With Podman
-podman build -t ai-session-langchain-prompts .
-
-# With Docker
-docker build -t ai-session-langchain-prompts .
-```
-
-This will:
-- Install all dependencies
-- Set up the application environment
-- Note: The Granite model needs to be available in your Ollama instance
-
-### Run the container
+When you're done, deactivate the virtual environment:
 
 ```bash
-# Podman (connects to host Ollama)
-podman run -it --rm --name ai-session-langchain \
-  --network host \
-  ai-session-langchain-prompts python3 /app/prompts.py
-
-# Docker (connects to host Ollama on macOS/Windows)
-docker run -it --rm --name ai-session-langchain \
-  -e OLLAMA_HOST=host.docker.internal:11434 \
-  ai-session-langchain-prompts python3 /app/prompts.py
-
-# Docker on Linux (connects to host Ollama)
-docker run -it --rm --name ai-session-langchain \
-  --network host \
-  ai-session-langchain-prompts python3 /app/prompts.py
+deactivate
 ```
 
 ## Model Information
@@ -107,27 +109,9 @@ This implementation uses:
 ## Requirements
 
 - Python 3.11+
-- langchain>=0.1.0
-- langchain-community>=0.0.20
-- ollama>=0.1.0
+- langchain>=0.3.13
+- langchain-community>=0.3.13
+- langchain-core>=0.3.28
+- langchain-ollama>=0.3.0
+- ollama>=0.4.4
 
-## Differences from Original Implementation
-
-The original implementation (`02_prompt-engineering`) used:
-- Direct transformers library with FLAN-T5 models
-- Custom generator function wrapper
-- Local model loading
-
-This LangChain implementation uses:
-- LangChain abstractions for prompt management
-- Ollama backend for model inference
-- Granite 3.3:8b model (more powerful than FLAN-T5)
-- Structured prompt templates for better maintainability
-
-## Usage Tips
-
-1. Make sure Ollama is running before starting the application
-2. The first request may take a moment as the model loads
-3. Use Ctrl-D to finish multi-line inputs
-4. Try the same prompt with different techniques to see how they affect responses
-5. Experiment with different models by changing the `--model` parameter

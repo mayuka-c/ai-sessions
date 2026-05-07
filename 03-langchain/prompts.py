@@ -1,6 +1,6 @@
 import os
 import argparse
-from langchain_community.llms import Ollama
+from langchain_ollama import OllamaLLM
 from prompt_types import (
     zero_shot_prompt,
     few_shot_prompt,
@@ -22,7 +22,7 @@ def initialize_model(model_name: str | None = None):
     if model_name is None:
         model_name = os.environ.get("MODEL_NAME", "granite3.3:8b")
     
-    llm = Ollama(
+    llm = OllamaLLM(
         model=model_name,
         temperature=0.7,
     )
